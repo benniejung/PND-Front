@@ -71,7 +71,7 @@ const router = createBrowserRouter([
             },
             {
               path: 'erd',
-              elemtn: <ErdDiagram/>
+              element: <ErdDiagram/>
             }
           ]
           

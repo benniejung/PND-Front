@@ -1,17 +1,17 @@
-import { styled, ThemeProvider } from 'styled-components';
-import { GlobalStyle } from './style/globalStyle';
-import { theme } from './style/theme.js';
-import { Outlet, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { styled, ThemeProvider } from "styled-components";
+import { GlobalStyle } from "./style/globalStyle";
+import { theme } from "./style/theme.js";
+import { Outlet, useLocation } from "react-router-dom";
+import { useState } from "react";
 
-import Header from './components/Header/Header.jsx';
-import Footer from './components/Footer/Footer.jsx';
+import Header from "./components/header/Header.jsx";
+import Footer from "./components/Footer/Footer.jsx";
 // 전체 레이아웃 크기 고정
 const BackGroundColor = styled.div`
   width: 100vw; /* 전체 너비 고정 */
-  //height: ${(props) => (props.isReadme || props.isEmpty && '100vh')};
-  min-height:100vh;
-  background-color: #F8F8FF;
+  //height: ${(props) => props.isReadme || (props.isEmpty && "100vh")};
+  min-height: 100vh;
+  background-color: #f8f8ff;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -35,8 +35,8 @@ const Layout = () => {
   const [isEmpty, setIsEmpty] = useState(false); // isEmpty 상태 추가
 
   // 현재 경로가 /readme이면 height를 100vh로 설정
-  const isReadme = currentPath === '/readme';
-    
+  const isReadme = currentPath === "/readme";
+
   // 인트로, 로그인, 회원가입 시 푸터 숨김
   // const hideFooter =
   //   currentPath === '/Signin' ||
@@ -45,7 +45,8 @@ const Layout = () => {
 
   return (
     <BackGroundColor isReadme={isReadme} isEmpty={isEmpty}>
-      <Header /> {/* 이미 내부에서 높이를 설정했으므로 외부에서 설정할 필요 없음 */}
+      <Header />{" "}
+      {/* 이미 내부에서 높이를 설정했으므로 외부에서 설정할 필요 없음 */}
       <Content>
         <Outlet context={{ isEmpty, setIsEmpty }} />
       </Content>
@@ -66,7 +67,6 @@ function App() {
 }
 
 export default App;
-
 
 // import { styled, ThemeProvider } from 'styled-components';
 // import { GlobalStyle } from './style/globalStyle';
@@ -89,7 +89,7 @@ export default App;
 //   min-height: ${height};
 //   background-color: ${({ theme }) => theme.colors.purple};
 //   position: relative;
-  
+
 // `;
 
 // const Content = styled.div`
@@ -123,7 +123,7 @@ export default App;
 //         <Footer />
 //     </BackGroundColor>
 //   );
-  
+
 // };
 
 // function App() {
@@ -137,3 +137,4 @@ export default App;
 //   );
 // }
 // export default App;
+
