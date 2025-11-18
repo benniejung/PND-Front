@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as S from "./style";
 import Modal from "react-modal";
 import { API } from "../../api/axios";
@@ -7,6 +8,7 @@ import { supabase } from "../../supabaseClient";
 import MainLogoImg from "../../assets/images/main-logo.svg";
 
 export default function LoginModal({ onSuccess }) {
+  const navigate = useNavigate();
   // 임시
   const [isLogin, setIsLogin] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -42,14 +44,12 @@ export default function LoginModal({ onSuccess }) {
           redirectTo: `${window.location.origin}`,
         },
       });
-
       if (error) {
-        console.error("GitHub 로그인 오류:", error);
-        alert("로그인에 실패했습니다. 다시 시도해주세요.");
+        navigate("/login-error");
         return;
       }
     } catch (err) {
-      alert("로그인 처리 중 오류가 발생했습니다.");
+      navigate("/login-error");
     }
   }
 

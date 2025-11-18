@@ -8,8 +8,9 @@
     "outDir": "./dist",
     "allowJs": true,
     "esModuleInterop": true,
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "jsx": "react-jsx"
   },
-  "exclude": ["node_modules", "**/*.(spec|test).ts"],
+  "exclude": ["node_modules", "**/*.(spec|test).ts", "**/*.(spec|test).tsx"],
   "include": ["./src/**/*"]
 }
