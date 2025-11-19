@@ -52,10 +52,12 @@ export default function LoginModal({ onSuccess }) {
         },
       });
       if (error) {
+        console.error("Login Error");
         navigate("/login-error");
         return;
       }
     } catch (err) {
+      console.error("Login Error");
       navigate("/login-error");
     }
   }
