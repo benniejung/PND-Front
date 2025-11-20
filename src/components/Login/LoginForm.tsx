@@ -3,31 +3,38 @@ import * as S from "./style";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useLoginMutation } from "./useLoginMutaion";
+import { useSignupMutation } from "./useSignupMutaion";
 
-import registerAction, { defaultFormState, UserData, FormState } from "./register";
+const USER_SCHEMA = z.object({
+  email: z.email("이메일 형식이 올바르지 않습니다."),
+  password: z.string().min(8, "비밀번호는 8자 이상이어야 합니다."),
+});
+
+type UserFormData = z.infer<typeof USER_SCHEMA>;
 
 const LoginForm = () => {
-  const userSchema = z.object({
-    email: z.string(),
-    password: z.string(),
-  });
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(userSchema),
+    resolver: zodResolver(USER_SCHEMA),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
-  const [state, setState] = useState<FormState<UserData>>(defaultFormState);
   const [showPassword, setShowPassword] = useState(false);
+  const { login } = useLoginMutation();
+  const { signup } = useSignupMutation();
 
-  const onSubmit = async (data: UserData) => {
+  const onSubmit = async (data: UserFormData) => {
     const formData = new FormData();
     formData.append("email", data.email);
     formData.append("password", data.password);
-    const result = await registerAction(state, formData);
-    setState(result);
+    signup(data);
   };
 
   return (
@@ -93,8 +100,7 @@ const LoginForm = () => {
           </S.PasswordToggleButton>
         </S.PasswordInputWrapper>
       </S.InputContainer>
-      <button type="button" >회원가입</button>
-
+      <S.SubmitButton type="submit" onClick={handleSubmit(onSubmit)}>로그인하기</S.SubmitButton>
     </form>
   );
 };

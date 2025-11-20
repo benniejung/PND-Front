@@ -21,6 +21,7 @@ import MyPageERD from "./pages/myproject/MyPageERD/MyPageERD";
 import MyPageGithubReport from "./pages/myproject/MyPageGithubReport/MyPageGithubReport";
 import MyPageSequenceDiagram from "./pages/myproject/MyPageSequenceDiagram/MyPageSequenceDiagram";
 import LoginError from "./components/Common/error/LoginError";
+import LoginPage from "./pages/login/LoginPage";
 
 const router = createBrowserRouter([
   {
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
       },
       {
         path: "login",
-        element: <LoginModal />,
+        element: <LoginPage />,
       },
       {
         path: "login-error",
