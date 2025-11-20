@@ -4,15 +4,25 @@ import * as S from "./style";
 import Modal from "react-modal";
 import { API } from "../../api/axios";
 import { supabase } from "../../supabaseClient";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 // 이미지
 import MainLogoImg from "../../assets/images/main-logo.svg";
+import LoginForm from "./LoginForm";
 
 export default function LoginModal({ onSuccess }) {
   const navigate = useNavigate();
-  // 임시
   const [isLogin, setIsLogin] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [modalOpen, setModalOpen] = useState(true);
+
+
+
+
+/*   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); */
 
   const fetchUserData = async () => {
     try {
@@ -27,9 +37,6 @@ export default function LoginModal({ onSuccess }) {
         totalReports: response.data.data.totalReports,
       };
       sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
-      // const testInfo = sessionStorage.getItem('userInfo');
-      // const parsedUserInfo = JSON.parse(testInfo);
-      // console.log(typeof(parsedUserInfo.name));
     } catch (error) {
       console.error(error);
     }
@@ -41,7 +48,7 @@ export default function LoginModal({ onSuccess }) {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "github",
         options: {
-          redirectTo: `${window.location.origin}`,
+          redirectTo: `${window.location.origin}/home`,
         },
       });
       if (error) {
@@ -101,6 +108,7 @@ export default function LoginModal({ onSuccess }) {
             <br />
             로그인 하시겠습니까?
           </S.LoginMessage>
+          <LoginForm />
           <S.LoginButton onClick={signInWithGithub}></S.LoginButton>
           <S.LoginBottomText>
             깃허브로 로그인을 하고
@@ -111,4 +119,5 @@ export default function LoginModal({ onSuccess }) {
       </S.LoginContainer>
     </Modal>
   );
+
 }

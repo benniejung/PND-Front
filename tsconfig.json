@@ -1,3 +1,19 @@
+/**
+* module: 네이티브 JS모듈(import, export) 사용하도록 지정
+* target: 타겟 버전(ES6)
+* moduleDetection: 모듈 감지 방식(auto)
+* noImplicitAny: 암시적 any 타입 금지, 명시적으로 타입 선언할 수 있도록 함. 타입 안정성 높임
+* sourceMap: 소스맵 생성 여부(false)
+* outDir: 컴파일된 JS 파일을 저장할 출력 디렉토리(./dist)
+* allowJs: JS 파일 허용 여부(true)
+* esModuleInterop: ES 모듈 상호 운용성 허용 여부(true)
+* moduleResolution: 모듈 해석 방식(Node)
+* jsx: JSX 문법 사용 방식(react-jsx)
+* strict: 엄격한 타입 검사 여부(true)
+* exclude: 컴파일 대상에서 제외할 파일 설정(node_modules와 테스트 코드 파일)
+* include: 컴파일 대상에서 포함할 파일 설정
+*/
+
 {
   "compilerOptions": {
     "module": "es2022",
@@ -9,7 +25,8 @@
     "allowJs": true,
     "esModuleInterop": true,
     "moduleResolution": "Node",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "strict": true
   },
   "exclude": ["node_modules", "**/*.(spec|test).ts", "**/*.(spec|test).tsx"],
   "include": ["./src/**/*"]

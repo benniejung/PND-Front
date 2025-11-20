@@ -62,3 +62,83 @@ font-size: 0.9rem;
 line-height: 1.5; 
 text-align:center;
 `;
+
+export const InputContainer = styled.div`
+  width: 90%;
+  margin-bottom: 2vh;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const InputLabel = styled.label`
+  color: black;
+  font-family: Inter;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5vh;
+`;
+
+export const InputField = styled.input`
+  width: 100%;
+  padding: 1vh 1vw;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  font-family: Inter;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: #4a90e2;
+  }
+
+  &::placeholder {
+    color: #a0a0a0;
+  }
+`;
+
+export const PasswordInputWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  ${InputField} {
+    padding-right: 3.5vw;
+  }
+`;
+
+export const PasswordToggleButton = styled.button`
+  position: absolute;
+  right: 1vw;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #4a90e2;
+  }
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const EyeIcon = styled.svg`
+  width: 20px;
+  height: 20px;
+  color: currentColor;
+`;
+
+export const EyeOffIcon = styled.svg`
+  width: 20px;
+  height: 20px;
+  color: currentColor;
+`;
