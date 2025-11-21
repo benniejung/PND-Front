@@ -72,11 +72,28 @@ export const LoginBottomText = styled.div`
   text-align: center;
 `;
 
+export const Form = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 export const InputContainer = styled.div`
   width: 90%;
   margin-bottom: 2vh;
   display: flex;
   flex-direction: column;
+  gap: 0.5vh;
+`;
+
+export const ErrorMessage = styled.p`
+  color: #e74c3c;
+  font-family: Inter;
+  font-size: 0.85rem;
+  font-weight: 400;
+  margin: 0;
+  margin-top: 0.5vh;
 `;
 
 export const InputLabel = styled.label`
@@ -111,11 +128,19 @@ export const PasswordInputWrapper = styled.div`
   position: relative;
   width: 100%;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.5vh;
 
   ${InputField} {
     padding-right: 3.5vw;
   }
+`;
+
+export const PasswordInputContainer = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
 `;
 
 export const PasswordToggleButton = styled.button`

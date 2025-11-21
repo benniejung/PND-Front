@@ -28,7 +28,7 @@ const LoginForm = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useLoginMutation();
-  const { signup } = useSignupMutation();
+  const { signup, isPending } = useSignupMutation();
 
   const onSubmit = async (data: UserFormData) => {
     const formData = new FormData();
@@ -38,7 +38,7 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <S.Form onSubmit={handleSubmit(onSubmit)}>
       <S.InputContainer>
         <S.InputLabel>이메일</S.InputLabel>
         <S.InputField
@@ -46,62 +46,66 @@ const LoginForm = () => {
           placeholder="이메일을 입력하세요"
           {...register("email")}
         />
+        {errors.email && <S.ErrorMessage>{errors.email.message}</S.ErrorMessage>}
       </S.InputContainer>
       <S.InputContainer>
         <S.InputLabel>비밀번호</S.InputLabel>
         <S.PasswordInputWrapper>
-          <S.InputField
-            type={showPassword ? "text" : "password"}
-            placeholder="비밀번호를 입력하세요"
-            {...register("password")}
-          />
-          <S.PasswordToggleButton
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? (
-              <S.EyeIcon viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="3"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                />
-              </S.EyeIcon>
-            ) : (
-              <S.EyeOffIcon viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <line
-                  x1="1"
-                  y1="1"
-                  x2="23"
-                  y2="23"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </S.EyeOffIcon>
-            )}
-          </S.PasswordToggleButton>
+          <S.PasswordInputContainer>
+            <S.InputField
+              type={showPassword ? "text" : "password"}
+              placeholder="비밀번호를 입력하세요"
+              {...register("password")}
+            />
+            <S.PasswordToggleButton
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                <S.EyeIcon viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                </S.EyeIcon>
+              ) : (
+                <S.EyeOffIcon viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <line
+                    x1="1"
+                    y1="1"
+                    x2="23"
+                    y2="23"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </S.EyeOffIcon>
+              )}
+            </S.PasswordToggleButton>
+          </S.PasswordInputContainer>
+          {errors.password && <S.ErrorMessage>{errors.password.message}</S.ErrorMessage>}
         </S.PasswordInputWrapper>
       </S.InputContainer>
-      <S.SubmitButton type="submit" onClick={handleSubmit(onSubmit)}>로그인하기</S.SubmitButton>
-    </form>
+      <S.SubmitButton type="submit" onClick={handleSubmit(onSubmit)}>{isPending ? "로그인 중..." : "로그인하기"}</S.SubmitButton>
+    </S.Form>
   );
 };
 
