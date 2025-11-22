@@ -121,8 +121,7 @@ const LoginForm = () => {
           {errors.password && <S.ErrorMessage>{errors.password.message}</S.ErrorMessage>}
         </S.PasswordInputWrapper>
       </S.InputContainer>
-      <S.SubmitButton type="submit" onClick={handleSubmit(onSubmit)}>{isPending ? "로그인 중..." : "로그인하기"}</S.SubmitButton>
-      <S.SignupButton type="button" onClick={() => navigate("/signup")}>회원가입하기</S.SignupButton>
+      <S.SubmitButton type="submit" onClick={handleSubmit(onSubmit)}>{isPending ? "로그인 중..." : "로그인"}</S.SubmitButton>
     </S.Form>
   );
 };

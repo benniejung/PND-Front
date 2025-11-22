@@ -32,7 +32,7 @@ export const LoginMessage = styled.div`
   color: black;
   text-align: center;
   font-family: Inter;
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   font-style: normal;
   font-weight: 600;
   line-height: 32px; /* 133.333% */
@@ -43,7 +43,7 @@ export const LoginMessage = styled.div`
 export const LogoImg = styled.img`
   margin-top: 5vh;
   max-width: 100%;
-  height: 12vh; // 로고 이미지를 원본 비율로 유지
+  height: 7vh; // 로고 이미지를 원본 비율로 유지
 `;
 
 export const LoginButton = styled.button`
@@ -239,5 +239,67 @@ export const SignupButton = styled.button`
   &:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+  }
+`;
+
+export const TabContainer = styled.div`
+  width: 90%;
+  display: flex;
+  gap: 0.5vw;
+  margin-bottom: 3vh;
+  border-bottom: 1px solid #e0e0e0;
+`;
+
+export const Tab = styled.button.withConfig({
+  shouldForwardProp: (prop) => prop !== "$active",
+})`
+  flex: 1;
+  padding: 1vh 0;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid
+    ${(props) => (props.$active ? "#4a90e2" : "transparent")};
+  color: ${(props) => (props.$active ? "#4a90e2" : "#a0a0a0")};
+  font-family: Inter;
+  font-size: 0.95rem;
+  font-weight: ${(props) => (props.$active ? "600" : "400")};
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+
+  &:hover {
+    color: #4a90e2;
+  }
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const SignupLinkContainer = styled.div`
+  width: 90%;
+  margin-top: 3vh;
+  padding-top: 2vh;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const SignupLinkText = styled.span`
+  color: #666;
+  font-family: Inter;
+  font-size: 0.9rem;
+  text-align: center;
+`;
+
+export const SignupLink = styled.span`
+  color: #4a90e2;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #357abd;
   }
 `;
