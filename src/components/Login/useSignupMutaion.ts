@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { supabase } from "../../supabaseClient";
 
 type UserFormData = {
+  name: string;
   email: string;
   password: string;
 };
@@ -52,6 +53,7 @@ export const useSignupMutation = () => {
         .from("users")
         .insert({
           id: authData.user.id,
+          name: data.name,
           email: authData.user.email,
           // GitHub 로그인이 아닌 경우 기본값
           github_id: null,

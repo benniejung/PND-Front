@@ -303,3 +303,22 @@ export const SignupLink = styled.span`
     color: #357abd;
   }
 `;
+
+export const SocialLoginContainer = styled.div`
+  width: 90%;
+  margin-top: 3vh;
+  padding-top: 3vh;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const SocialLoginTitle = styled.div`
+  color: #666;
+  font-family: Inter;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 2vh;
+  text-align: center;
+`;

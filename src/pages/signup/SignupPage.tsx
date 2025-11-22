@@ -5,6 +5,7 @@ import { supabase } from "../../supabaseClient";
 // 이미지
 import MainLogoImg from "../../assets/images/main-logo.svg";
 import SignupForm from "../../components/Login/SignupForm";
+import GithubLoginButton from "../../assets/images/alt-profile.png";
 
 export default function SignupPage() {
     const navigate = useNavigate();
@@ -36,17 +37,15 @@ export default function SignupPage() {
             <S.LoginModal>
                 <S.LogoImg src={MainLogoImg} />
                 <S.LoginMessage>
-                    P-ND에 오신 것을 환영합니다.
-                    <br />
-                    회원가입을 진행해주세요.
+                    회원가입
                 </S.LoginMessage>
                 <SignupForm />
-                <S.LoginButton onClick={signInWithGithub}></S.LoginButton>
-                <S.LoginBottomText>
-                    깃허브로 회원가입을 하고
-                    <br />
-                    P-ND의 더 많은 서비스를 사용해보세요!
-                </S.LoginBottomText>
+
+                {/* 구분선 및 소셜 로그인 */}
+                <S.SocialLoginContainer>
+                    <S.SocialLoginTitle>소셜로그인</S.SocialLoginTitle>
+                    <img src={GithubLoginButton} alt="Github Login" style={{ width: '50px', height: '50px' }} />
+                </S.SocialLoginContainer>
             </S.LoginModal>
         </S.LoginContainer>
     );
