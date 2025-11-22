@@ -22,11 +22,15 @@ import MyPageGithubReport from "./pages/myproject/MyPageGithubReport/MyPageGithu
 import MyPageSequenceDiagram from "./pages/myproject/MyPageSequenceDiagram/MyPageSequenceDiagram";
 import LoginError from "./components/Common/error/LoginError";
 import LoginPage from "./pages/login/LoginPage";
+import SignupPage from "./pages/signup/SignupPage";
+import ErrorPage from "./pages/error/ErrorPage";
+import NotFoundPage from "./pages/error/NotFoundPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "",
@@ -52,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <LoginPage />,
+      },
+      {
+        path: "signup",
+        element: <SignupPage />,
       },
       {
         path: "login-error",
@@ -98,6 +106,10 @@ const router = createBrowserRouter([
       {
         path: "mypageGithubReport",
         element: <MyPageGithubReport />,
+      },
+      {
+        path: "*",
+        element: <NotFoundPage />,
       },
     ],
   },
