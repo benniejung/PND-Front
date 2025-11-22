@@ -73,12 +73,13 @@
 ## 커밋 메시지 규칙
 
 우리는 **Gitmoji**와 **AngularJS Git Commit Message Conventions**를 따릅니다.
+스테이징된 코드를 분석해서 커밋 메시지를 추천해줍니다.
 
 ### 2.1 커밋 형식
 커밋 메시지는 다음 형식을 따라야 합니다.
 
 ```
-<type>(<scope>): <gitmoji> <subject>
+<gitmoji> <type>(<scope>): <subject>
 <body> (선택 사항)
 <footer> (선택 사항 - 예: Breaking Change, Issue Close)
 ```
