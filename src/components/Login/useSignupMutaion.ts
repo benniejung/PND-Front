@@ -48,19 +48,24 @@ export const useSignupMutation = () => {
       }
 
       // 2. users 테이블에 삽입
-      const { error: insertError } = await supabase.from("users").insert({
-        id: authData.user.id,
-        email: authData.user.email,
-        // GitHub 로그인이 아닌 경우 기본값
-        github_id: null,
-        username: authData.user.email?.split("@")[0] || "user",
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      });
+      const { data: insertData, error: insertError } = await supabase
+        .from("users")
+        .insert({
+          id: authData.user.id,
+          email: authData.user.email,
+          // GitHub 로그인이 아닌 경우 기본값
+          github_id: null,
+          password: data.password,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .select();
 
       if (insertError) {
         console.error("users 테이블 삽입 실패:", insertError);
-        // Auth 사용자는 생성되었으므로 에러를 던지지 않음
+        throw new Error(
+          `회원가입은 완료되었지만 사용자 정보 저장에 실패했습니다: ${insertError.message}`
+        );
       }
 
       return {

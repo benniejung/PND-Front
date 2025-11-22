@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "../../components/Login/style";
-import { API } from "../../api/axios";
 import { supabase } from "../../supabaseClient";
+import { ErrorBoundary } from "react-error-boundary";
 // 이미지
 import MainLogoImg from "../../assets/images/main-logo.svg";
 import LoginForm from "../../components/Login/LoginForm";
@@ -41,7 +41,9 @@ export default function LoginPage() {
                     <br />
                     로그인 하시겠습니까?
                 </S.LoginMessage>
-                <LoginForm />
+                <ErrorBoundary FallbackComponent={() => <div>에러가 발생했습니다.</div>}>
+                    <LoginForm />
+                </ErrorBoundary>
                 <S.LoginButton onClick={signInWithGithub}></S.LoginButton>
                 <S.LoginBottomText>
                     깃허브로 로그인을 하고

@@ -1,10 +1,13 @@
+import React from "react";
 import { z } from "zod";
 import * as S from "./style";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { useLoginMutation } from "./useLoginMutaion";
-import { useSignupMutation } from "./useSignupMutaion";
+import { useNavigate } from "react-router-dom";
+import { useLoginMutation, AuthApiError } from "./useLoginMutaion";
+import { getAuthErrorMessage, AuthErrorCode } from "./type.error";
+import toast from "react-hot-toast";
 
 const USER_SCHEMA = z.object({
   email: z.email("이메일 형식이 올바르지 않습니다."),
@@ -27,15 +30,29 @@ const LoginForm = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useLoginMutation();
-  const { signup, isPending } = useSignupMutation();
+  const navigate = useNavigate();
+  const { login, isPending, isSuccess, isError, error } = useLoginMutation();
 
   const onSubmit = async (data: UserFormData) => {
     const formData = new FormData();
     formData.append("email", data.email);
     formData.append("password", data.password);
-    signup(data);
+    login(formData);
   };
+
+  React.useEffect(() => {
+    if (isSuccess) {
+      toast.success("로그인에 성공했습니다!");
+      navigate("/home");
+    }
+    if (isError && error) {
+      const errorMessage =
+        error instanceof AuthApiError
+          ? error.message
+          : getAuthErrorMessage(AuthErrorCode.LOGIN_FAILED);
+      toast.error(errorMessage);
+    }
+  }, [isSuccess, isError, error, navigate]);
 
   return (
     <S.Form onSubmit={handleSubmit(onSubmit)}>
@@ -105,6 +122,7 @@ const LoginForm = () => {
         </S.PasswordInputWrapper>
       </S.InputContainer>
       <S.SubmitButton type="submit" onClick={handleSubmit(onSubmit)}>{isPending ? "로그인 중..." : "로그인하기"}</S.SubmitButton>
+      <S.SignupButton type="button" onClick={() => navigate("/signup")}>회원가입하기</S.SignupButton>
     </S.Form>
   );
 };
