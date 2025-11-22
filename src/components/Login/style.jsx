@@ -211,3 +211,33 @@ export const SubmitButton = styled.button`
     transform: none;
   }
 `;
+
+export const SignupButton = styled.button`
+  width: 90%;
+  padding: 1.2vh 1vw;
+  margin-top: 1vh;
+  background-color: transparent;
+  color: #4a90e2;
+  border: 2px solid #4a90e2;
+  border-radius: 8px;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, transform 0.1s;
+  box-sizing: border-box;
+
+  &:hover {
+    background-color: #4a90e2;
+    color: white;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+  }
+`;
