@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { z } from "zod";
 import * as S from "./style";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation, AuthApiError } from "./useLoginMutaion";
 import { getAuthErrorMessage, AuthErrorCode } from "./type.error";
@@ -21,6 +20,7 @@ const LoginForm = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm({
     resolver: zodResolver(USER_SCHEMA),
     defaultValues: {
@@ -30,6 +30,12 @@ const LoginForm = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const emailValue = watch("email");
+  const passwordValue = watch("password");
+
+  // 이메일과 비밀번호가 모두 입력되어 있을 때만 버튼 활성화
+  const isFormValid = emailValue && emailValue.trim() !== "" && passwordValue && passwordValue.trim() !== "";
+
   const navigate = useNavigate();
   const { login, isPending, isSuccess, isError, error } = useLoginMutation();
 
@@ -121,7 +127,9 @@ const LoginForm = () => {
           {errors.password && <S.ErrorMessage>{errors.password.message}</S.ErrorMessage>}
         </S.PasswordInputWrapper>
       </S.InputContainer>
-      <S.SubmitButton type="submit" onClick={handleSubmit(onSubmit)}>{isPending ? "로그인 중..." : "로그인"}</S.SubmitButton>
+      <S.SubmitButton type="submit" disabled={!isFormValid || isPending} onClick={handleSubmit(onSubmit)}>
+        {isPending ? "로그인 중..." : "로그인"}
+      </S.SubmitButton>
     </S.Form>
   );
 };
