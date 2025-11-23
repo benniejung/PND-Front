@@ -5,11 +5,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSignupMutation } from "./useSignupMutaion";
+import { AppError } from "./error.type";
+import { getUserFriendlyErrorMessage } from "./errorFactory";
+import { toast } from "react-hot-toast";
 
 const USER_SCHEMA = z
     .object({
         name: z.string().min(1, "이름을 입력해주세요."),
-        email: z.string().email("이메일 형식이 올바르지 않습니다."),
+        email: z.string().min(1, "이메일을 입력해주세요.").email("이메일 형식이 올바르지 않습니다."),
         password: z.string().min(8, "비밀번호는 8자 이상이어야 합니다."),
         passwordConfirm: z.string().min(1, "비밀번호 확인을 입력해주세요."),
     })
@@ -41,10 +44,17 @@ const SignupForm = () => {
     const { signup, isPending } = useSignupMutation();
 
     const onSubmit = async (data: UserFormData) => {
-        const { passwordConfirm, ...signupData } = data;
-        signup(signupData, {
+        const formData = new FormData();
+        formData.append("name", data.name);
+        formData.append("email", data.email);
+        formData.append("password", data.password);
+        signup(formData, {
             onSuccess: () => {
+                toast.success("회원가입에 성공했습니다!");
                 navigate("/login");
+            },
+            onError: (error: AppError) => {
+                toast.error(getUserFriendlyErrorMessage(error));
             },
         });
     };

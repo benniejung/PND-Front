@@ -1,19 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "../../supabaseClient";
-
-type UserFormData = {
-  name: string;
-  email: string;
-  password: string;
-};
-
-type AuthResponse = {
-  user: {
-    id: string;
-    email: string;
-  } | null;
-  session: any;
-};
+import { createErrorObject } from "./errorFactory";
+import { AppError } from "./error.type";
 
 /**
  * 회원가입 Mutation
@@ -27,63 +15,49 @@ export const useSignupMutation = () => {
     isError,
     error,
   } = useMutation({
-    mutationFn: async (data: UserFormData): Promise<AuthResponse> => {
-      // 1. Supabase Auth에 사용자 생성
-      const { data: authData, error: signUpError } = await supabase.auth.signUp(
-        {
-          email: data.email,
-          password: data.password,
-          options: {
-            // 이메일 인증 없이 바로 로그인 (개발용)
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-          },
+    mutationFn: async (formData: FormData) => {
+      const name = formData.get("name") as string;
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
+
+      try {
+        // 1. Supabase Auth에 사용자 생성
+        const { data: authData, error: signUpError } =
+          await supabase.auth.signUp({
+            email: email,
+            password: password,
+          });
+
+        if (signUpError) {
+          throw createErrorObject(signUpError);
         }
-      );
 
-      if (signUpError) {
-        throw new Error(signUpError.message);
-      }
-
-      if (!authData.user) {
-        throw new Error("회원가입 실패: 사용자 정보가 없습니다");
-      }
-
-      // 2. users 테이블에 삽입
-      const { data: insertData, error: insertError } = await supabase
-        .from("users")
-        .insert({
-          id: authData.user.id,
-          name: data.name,
-          email: authData.user.email,
-          // GitHub 로그인이 아닌 경우 기본값
+        // 2. users 테이블에 삽입
+        const { error: insertError } = await supabase.from("users").insert({
+          id: authData.user?.id,
+          name: name,
+          email: email,
+          password: password,
+          auth_provider: "email",
           github_id: null,
-          password: data.password,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        })
-        .select();
+          username: null,
+        });
 
-      if (insertError) {
-        console.error("users 테이블 삽입 실패:", insertError);
-        throw new Error(
-          `회원가입은 완료되었지만 사용자 정보 저장에 실패했습니다: ${insertError.message}`
-        );
+        if (insertError) {
+          throw createErrorObject(insertError);
+        }
+
+        return {
+          authData,
+        };
+      } catch (error) {
+        throw error;
       }
-
-      return {
-        user: {
-          id: authData.user.id,
-          email: authData.user.email || "",
-        },
-        session: authData.session,
-      };
     },
     onSuccess: (data) => {
-      alert("회원가입 성공");
-      return data;
+      return data.authData;
     },
-    onError: (error: Error) => {
-      alert("회원가입 실패");
+    onError: (error: AppError) => {
       throw error;
     },
   });

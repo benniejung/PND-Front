@@ -4,8 +4,8 @@ import * as S from "./style";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useLoginMutation, AuthApiError } from "./useLoginMutaion";
-import { getAuthErrorMessage, AuthErrorCode } from "./type.error";
+import { useLoginMutation } from "./useLoginMutaion";
+import { getUserFriendlyErrorMessage } from "./errorFactory";
 import toast from "react-hot-toast";
 
 const USER_SCHEMA = z.object({
@@ -49,13 +49,11 @@ const LoginForm = () => {
   React.useEffect(() => {
     if (isSuccess) {
       toast.success("로그인에 성공했습니다!");
-      navigate("/home");
+      navigate("/");
     }
     if (isError && error) {
       const errorMessage =
-        error instanceof AuthApiError
-          ? error.message
-          : getAuthErrorMessage(AuthErrorCode.LOGIN_FAILED);
+        getUserFriendlyErrorMessage(error);
       toast.error(errorMessage);
     }
   }, [isSuccess, isError, error, navigate]);
