@@ -9,7 +9,7 @@ import {
   ServiceErrorCode,
   ServiceError,
   AuthErrorCode,
-} from "./error.type";
+} from "../type/error.type";
 import {
   isAuthApiError,
   PostgrestError,

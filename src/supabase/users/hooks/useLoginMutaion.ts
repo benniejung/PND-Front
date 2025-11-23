@@ -1,7 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { supabase } from "../../supabaseClient";
-import { createErrorObject } from "./errorFactory";
-import { AuthErrorCode, AuthError, AppError } from "./error.type";
+import { supabase } from "../../../supabaseClient";
+import { createErrorObject } from "../utils/errorFactory";
+import { AuthErrorCode, AuthError, AppError } from "../type/error.type";
+import { DATABASE_TABLE } from "../../../constants/database";
 
 /**
  * 로그인 Mutation
@@ -22,7 +23,7 @@ export const useLoginMutation = () => {
       try {
         // 1단계: 이메일 존재 여부 확인
         const { data: existingUser, error: checkError } = await supabase
-          .from("users")
+          .from(DATABASE_TABLE.USERS)
           .select("email")
           .eq("email", email)
           .maybeSingle();

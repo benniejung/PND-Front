@@ -4,8 +4,8 @@ import * as S from "./style";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useLoginMutation } from "./useLoginMutaion";
-import { getUserFriendlyErrorMessage } from "./errorFactory";
+import { useLoginMutation } from "../../supabase/users/hooks/useLoginMutaion";
+import { getUserFriendlyErrorMessage } from "../../supabase/users/utils/errorFactory";
 import toast from "react-hot-toast";
 
 const USER_SCHEMA = z.object({

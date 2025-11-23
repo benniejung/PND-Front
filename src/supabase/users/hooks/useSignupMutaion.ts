@@ -1,7 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { supabase } from "../../supabaseClient";
-import { createErrorObject } from "./errorFactory";
-import { AppError } from "./error.type";
+import { supabase } from "../../../supabaseClient";
+import { createErrorObject } from "../utils/errorFactory";
+import { AppError } from "../type/error.type";
+import { DATABASE_TABLE } from "../../../constants/database";
 
 /**
  * 회원가입 Mutation
@@ -33,15 +34,17 @@ export const useSignupMutation = () => {
         }
 
         // 2. users 테이블에 삽입
-        const { error: insertError } = await supabase.from("users").insert({
-          id: authData.user?.id,
-          name: name,
-          email: email,
-          password: password,
-          auth_provider: "email",
-          github_id: null,
-          username: null,
-        });
+        const { error: insertError } = await supabase
+          .from(DATABASE_TABLE.USERS)
+          .insert({
+            id: authData.user?.id,
+            name: name,
+            email: email,
+            password: password,
+            auth_provider: "email",
+            github_id: null,
+            username: null,
+          });
 
         if (insertError) {
           throw createErrorObject(insertError);
