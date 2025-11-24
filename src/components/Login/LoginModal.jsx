@@ -17,10 +17,7 @@ export default function LoginModal({ onSuccess }) {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [modalOpen, setModalOpen] = useState(true);
 
-
-
-
-/*   const [email, setEmail] = useState("");
+  /*   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false); */
 
@@ -121,5 +118,4 @@ export default function LoginModal({ onSuccess }) {
       </S.LoginContainer>
     </Modal>
   );
-
 }
