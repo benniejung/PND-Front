@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 
 import Header from "./components/header/Header.jsx";
+import { useMyProfile } from "./store/myprofile/myprofile.store";
 // 전체 레이아웃 크기 고정
 const BackGroundColor = styled.div`
   width: 100vw; /* 전체 너비 고정 */
@@ -33,6 +34,9 @@ const Layout = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const [isEmpty, setIsEmpty] = useState(false); // isEmpty 상태 추가
+
+  // 사용자 정보를 스토어에 자동으로 동기화
+  useMyProfile();
 
   // 현재 경로가 /readme이면 height를 100vh로 설정
   const isReadme = currentPath === "/readme";

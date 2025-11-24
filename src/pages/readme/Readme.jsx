@@ -1,43 +1,52 @@
-import React, { useState, useRef, useEffect } from 'react';
-import InputAreaHeader from '../../components/readmeComponents/TextArea/InputAreaHeader';
-import MdArea from '../../components/readmeComponents/TextArea/MdArea';
-import InputArea from '../../components/readmeComponents/TextArea/InputArea';
-import { Title, Divider, MdAreaHeader, Container, Content, ReadmeContainer, Container2 } from './ReadmeStyle';
-import { Helmet } from 'react-helmet';
-import RepoSettingModalForMyPage from '../../components/Common/RepoSettingModalForMyPage';
-import { API, MultipartApi } from '../../api/axios';
-import LoginModal from '../../components/Login/LoginModal';
-import Loader from '../../components/Diagram/Loader';
-import RepoSettingModal from '../../components/Common/RepoSettingModal';
-import { useLocation } from 'react-router-dom';
-import moment from 'moment';
+import React, { useState, useRef, useEffect } from "react";
+import InputAreaHeader from "../../components/readmeComponents/TextArea/InputAreaHeader";
+import MdArea from "../../components/readmeComponents/TextArea/MdArea";
+import InputArea from "../../components/readmeComponents/TextArea/InputArea";
+import {
+  Title,
+  Divider,
+  MdAreaHeader,
+  Container,
+  Content,
+  ReadmeContainer,
+  Container2,
+} from "./ReadmeStyle";
+import { Helmet } from "react-helmet";
+import RepoSettingModalForMyPage from "../../components/Common/RepoSettingModalForMyPage";
+import { API, MultipartApi } from "../../api/axios";
+import LoginModal from "../../components/Login/LoginModal";
+import Loader from "../../components/Diagram/Loader";
+import RepoSettingModal from "../../components/Common/RepoSettingModal";
+import { useLocation } from "react-router-dom";
+import moment from "moment";
+import { Link } from "react-router-dom";
 function Readme() {
   const inputRef = useRef(null);
   const [content, setContent] = useState("");
   const [clickedButton, setClickedButton] = useState("");
-  const [badgeURL, setBadgeURL] = useState('');
-  const [imageURL, setimageURL] = useState('');
+  const [badgeURL, setBadgeURL] = useState("");
+  const [imageURL, setimageURL] = useState("");
   const [isSelectedProject, setIsSelectedProject] = useState(false);
-  const [selectedProjectId, setSelectedProjectId] = useState('');
+  const [selectedProjectId, setSelectedProjectId] = useState("");
   const [isClickCreateBtn, setIsClickCreateBtn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState(null);
   const [needLogin, setNeedLogin] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [title, setTitle] = useState('');
-  const [image, setImage] = useState('');
+  const [title, setTitle] = useState("");
+  const [image, setImage] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isBaseInfoSet, setIsBaseInfoSet] = useState(null); // 마이프로젝트에 이미 있는 항목을 선택했는지 안했는지의 상태
 
   const location = useLocation();
-  const userToken = localStorage.getItem('token');
-  
+  const userToken = localStorage.getItem("token");
+
   const fetchUserReadme = async (repoId) => {
     setLoading(true);
     try {
       const response = await API.get(`api/pnd/readme/${repoId}`);
-      setContent( response.data.data.readmeScript);
+      setContent(response.data.data.readmeScript);
       // console.log(response.data.data.readmeScript);
       setError(null);
     } catch (error) {
@@ -46,50 +55,55 @@ function Readme() {
       } else {
         setError("README를 불러오는 중 오류가 발생했습니다.");
       }
-      setContent('');
-    }
-    finally{
+      setContent("");
+    } finally {
       setLoading(false);
     }
   };
 
   const putRepoInfo = async () => {
     try {
-        const formData = new FormData();
+      const formData = new FormData();
 
-        // JSON 데이터 추가
-        const jsonData = {
-            title: title,
-            period: `${startDate} ~ ${endDate}`,
-        };
-        formData.append('data', new Blob([JSON.stringify(jsonData)], { type: 'application/json' }));
+      // JSON 데이터 추가
+      const jsonData = {
+        title: title,
+        period: `${startDate} ~ ${endDate}`,
+      };
+      formData.append(
+        "data",
+        new Blob([JSON.stringify(jsonData)], { type: "application/json" })
+      );
 
-        // 이미지 파일이 존재할 경우에만 이미지 파일을 추가
-        if (image instanceof File || image instanceof Blob) {
-            formData.append('image', image); // 이미지를 Blob이나 File로 추가
-            console.log("이미지 파일이 추가되었습니다:", image);
-        } else {
-            console.log("이미지가 없습니다.");
-            formData.append('image', null);
-        }
-        // 서버로 요청 보내기
-        const response = await MultipartApi.put(`api/pnd/repo/${selectedProjectId}`, formData);
+      // 이미지 파일이 존재할 경우에만 이미지 파일을 추가
+      if (image instanceof File || image instanceof Blob) {
+        formData.append("image", image); // 이미지를 Blob이나 File로 추가
+        console.log("이미지 파일이 추가되었습니다:", image);
+      } else {
+        console.log("이미지가 없습니다.");
+        formData.append("image", null);
+      }
+      // 서버로 요청 보내기
+      const response = await MultipartApi.put(
+        `api/pnd/repo/${selectedProjectId}`,
+        formData
+      );
 
-        if (response.status === 200) {
-            console.log(response.message);
-            console.log(response.data);
-        } else {
-            console.error("HTTP error: ", response.status);
-        }
+      if (response.status === 200) {
+        console.log(response.message);
+        console.log(response.data);
+      } else {
+        console.error("HTTP error: ", response.status);
+      }
     } catch (err) {
-        console.log("API 통신 중 오류 발생:", err);
+      console.log("API 통신 중 오류 발생:", err);
     }
-};
+  };
 
-    // 생성하러가기 버튼 클릭 유무 확인
-    useEffect(() => {
-      console.log("생성하러가기 버튼 클릭 유무: " + isClickCreateBtn);
-      setIsModalOpen(false);
+  // 생성하러가기 버튼 클릭 유무 확인
+  useEffect(() => {
+    console.log("생성하러가기 버튼 클릭 유무: " + isClickCreateBtn);
+    setIsModalOpen(false);
   }, [isClickCreateBtn]);
 
   const handleInputChange = (newContent) => {
@@ -108,29 +122,27 @@ function Readme() {
 
   const handleBadgeAdd = (badgeURL) => {
     setBadgeURL(badgeURL);
-    setClickedButton('Badge');
+    setClickedButton("Badge");
   };
 
   const handleImageAdd = (imageURL) => {
     // console.log(imageURL);
     setimageURL(imageURL);
-    setClickedButton('Image');
+    setClickedButton("Image");
   };
   function setStateBaseInfo() {
     setIsBaseInfoSet(true);
-}
+  }
 
   useEffect(() => {
-    const userInfo = sessionStorage.getItem('userInfo');
+    const userInfo = sessionStorage.getItem("userInfo");
     const queryParam = new URLSearchParams(location.search);
-    const repoId = queryParam.get('edit');
-    if(userInfo!==null && repoId===null){
+    const repoId = queryParam.get("edit");
+    if (userInfo !== null && repoId === null) {
       setIsModalOpen(true);
-    }
-    else if(repoId!==null){
+    } else if (repoId !== null) {
       fetchUserReadme(repoId);
-    }
-    else{
+    } else {
       setNeedLogin(true);
     }
   }, []);
@@ -142,60 +154,65 @@ function Readme() {
   }, [selectedProjectId]); // selectedProjectId가 변경될 때마다 fetchUserReadme 호출
 
   useEffect(() => {
-    console.log("isBaseInfoSet : ",isBaseInfoSet);
-    console.log('isClickCreateBtn',isClickCreateBtn);
-    if (isClickCreateBtn && !isBaseInfoSet) { // 기본 정보가 저장되어있지 않은 상태 && 기본 정보가 이미 저장되어있다면 기본 정보를 저장한다
-        putRepoInfo();
+    console.log("isBaseInfoSet : ", isBaseInfoSet);
+    console.log("isClickCreateBtn", isClickCreateBtn);
+    if (isClickCreateBtn && !isBaseInfoSet) {
+      // 기본 정보가 저장되어있지 않은 상태 && 기본 정보가 이미 저장되어있다면 기본 정보를 저장한다
+      putRepoInfo();
     }
-}, [isClickCreateBtn]);
+  }, [isClickCreateBtn]);
 
   return (
     <ReadmeContainer>
       {loading && <Loader />}
       <Helmet>
-        <link href="https://fonts.googleapis.com/css2?family=Edu+QLD+Beginner&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Edu+QLD+Beginner&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+          rel="stylesheet"
+        />
       </Helmet>
-      <InputAreaHeader 
-        onButtonClick={handleButtonClick}  
+      <InputAreaHeader
+        onButtonClick={handleButtonClick}
         onBadgeAdd={handleBadgeAdd}
         onImageAdd={handleImageAdd}
         content={content}
-        selectedProjectId={selectedProjectId}  
+        selectedProjectId={selectedProjectId}
         userToken={userToken}
       />
       <Content>
         <Container>
-            <InputArea
-              onChange={handleInputChange}
-              content={content}
-              inputRef={inputRef}
-              clickedButton={clickedButton}
-              onMarkdownApplied={handleMarkdownApplied}
-              badgeURL={badgeURL}
-              imgURL={imageURL}
-              selectedProjectId={selectedProjectId}  // selectedProjectId를 InputArea에 전달
-            />
+          <InputArea
+            onChange={handleInputChange}
+            content={content}
+            inputRef={inputRef}
+            clickedButton={clickedButton}
+            onMarkdownApplied={handleMarkdownApplied}
+            badgeURL={badgeURL}
+            imgURL={imageURL}
+            selectedProjectId={selectedProjectId} // selectedProjectId를 InputArea에 전달
+          />
         </Container>
-        <Divider/>
+        <Divider />
         <Container2>
           <MdArea content={content} />
         </Container2>
       </Content>
       {isModalOpen && (
         <RepoSettingModal
-        closeModal={() => setIsModalOpen(false)} // 모달창 닫는 명령어 전달
-        onSelectProject={() => setIsSelectedProject(true)} // 상태 업데이트 핸들러 전달
-        onSelectedProjectId={(id) => setSelectedProjectId(id)} // 선택한 프로젝트 아이디 전달
-        onClickCreateBtn={() => setIsClickCreateBtn(true)} // 생성하기 버튼 클릭된 상태 전달
-        onTitleChange={(newTitle) => setTitle(newTitle)}
-        onImageChange={(newImage) => setImage(newImage)}
-        onDateChange={(start, end) => { setStartDate(start); setEndDate(end); }}
-        stateBaseInfo={setStateBaseInfo}
+          closeModal={() => setIsModalOpen(false)} // 모달창 닫는 명령어 전달
+          onSelectProject={() => setIsSelectedProject(true)} // 상태 업데이트 핸들러 전달
+          onSelectedProjectId={(id) => setSelectedProjectId(id)} // 선택한 프로젝트 아이디 전달
+          onClickCreateBtn={() => setIsClickCreateBtn(true)} // 생성하기 버튼 클릭된 상태 전달
+          onTitleChange={(newTitle) => setTitle(newTitle)}
+          onImageChange={(newImage) => setImage(newImage)}
+          onDateChange={(start, end) => {
+            setStartDate(start);
+            setEndDate(end);
+          }}
+          stateBaseInfo={setStateBaseInfo}
         />
       )}
-      {needLogin &&(
-        <LoginModal></LoginModal>
-      )}
+      {needLogin && <Link to="/login" />}
     </ReadmeContainer>
   );
 }

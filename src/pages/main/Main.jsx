@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as S from "./MainStyle.jsx";
 import { supabase } from "../../supabaseClient.js";
+import useGetUser from "../../supabase/users/hooks/useGetUser.js";
+import { useMyProfileStore } from "../../store/myprofile/myprofile.store.js";
 
 // images
 import ReadmeImg from "../../assets/images/main-readme-img.svg";
@@ -111,19 +113,6 @@ function Main() {
     }
   };
 
-  // 세션 확인
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      if (data?.session?.access_token) {
-        setHasSession(true);
-      } else {
-        setHasSession(false);
-      }
-    };
-    checkSession();
-  }, []);
-
   const moveTo = () => {
     if (hasSession || sessionStorage.getItem("token")) {
       navigate("/myProjects");
@@ -131,6 +120,24 @@ function Main() {
       navigate("/login");
     }
   };
+
+  const { data: userData, isPending, error } = useGetUser();
+  const setMyProfile = useMyProfileStore((state) => state.setMyProfile);
+  const clearMyProfile = useMyProfileStore((state) => state.clearMyProfile);
+  useEffect(() => {
+    if (error) {
+      clearMyProfile();
+    }
+    if (!isPending) {
+      if (userData) {
+        setMyProfile(userData);
+      } else {
+        clearMyProfile();
+      }
+    }
+  }, [userData, isPending, setMyProfile, clearMyProfile]);
+
+  const { myProfile } = useMyProfileStore();
 
   return (
     <S.MainLayout ref={outerDivRef}>
@@ -147,7 +154,7 @@ function Main() {
           <S.MainSubHeaderText>
             지금 바로 깃허브로 로그인하고 시작해보세요
           </S.MainSubHeaderText>
-          {hasSession || sessionStorage.getItem("token") ? (
+          {myProfile?.isLoggedIn ? (
             <S.MainLoginButton onClick={moveTo}>
               마이페이지 가기
             </S.MainLoginButton>
