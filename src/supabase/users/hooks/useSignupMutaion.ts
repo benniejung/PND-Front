@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "../../../supabaseClient";
-import { createErrorObject } from "../utils/errorFactory";
-import { AppError } from "../type/error.type";
+import { createErrorObject } from "../../../components/Common/error/utils/errorFactory";
+import { AppError } from "../../../components/Common/error/type/error.type";
 import { DATABASE_TABLE } from "../../../constants/database";
 
 /**

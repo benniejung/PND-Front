@@ -5,8 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSignupMutation } from "../../supabase/users/hooks/useSignupMutaion";
-import { AppError } from "../../supabase/users/type/error.type";
-import { getUserFriendlyErrorMessage } from "../../supabase/users/utils/errorFactory";
+import { AppError } from "../../components/Common/error/type/error.type";
+import { getUserFriendlyErrorMessage } from "../../components/Common/error/utils/errorFactory";
 import { toast } from "react-hot-toast";
 
 const USER_SCHEMA = z

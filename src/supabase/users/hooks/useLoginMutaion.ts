@@ -1,7 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "../../../supabaseClient";
-import { createErrorObject } from "../utils/errorFactory";
-import { AuthErrorCode, AuthError, AppError } from "../type/error.type";
+import { createErrorObject } from "../../../components/Common/error/utils/errorFactory";
+import {
+  AuthErrorCode,
+  AuthError,
+  AppError,
+} from "../../../components/Common/error/type/error.type";
 import { DATABASE_TABLE } from "../../../constants/database";
 
 /**
@@ -67,24 +71,4 @@ export const useLoginMutation = () => {
   });
 
   return { login, isPending, isError, error, isSuccess };
-};
-
-/**
- * 로그아웃 Mutation
- */
-export const useLogoutMutation = () => {
-  const { mutate: logout, isPending } = useMutation({
-    mutationFn: async () => {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      return;
-    },
-    onError: (error: Error) => {
-      console.error("로그아웃 실패:", error);
-    },
-  });
-
-  return { logout, isPending };
 };
