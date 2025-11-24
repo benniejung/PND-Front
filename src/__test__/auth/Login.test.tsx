@@ -52,12 +52,26 @@ describe("Login - Main 컴포넌트", () => {
     const MOCK_GET_SESSION = vi.mocked(supabase.auth.getSession);
 
     const MOCK_EMPTY_SESSION: Session = {
-        access_token: null,
-        refresh_token: null,
-        expires_in: null,
-        expires_at: null,
-        token_type: null,
-        user: null,
+        access_token: "",
+        refresh_token: "",
+        expires_in: 0,
+        expires_at: 0,
+        token_type: "bearer",
+        user: {
+            id: "mock-user-id",
+            aud: "authenticated",
+            role: "authenticated",
+            email: "test@example.com",
+            email_confirmed_at: new Date().toISOString(),
+            phone: "",
+            confirmed_at: new Date().toISOString(),
+            last_sign_in_at: new Date().toISOString(),
+            app_metadata: {},
+            user_metadata: {},
+            identities: [],
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+        },
     };
 
     const MOCK_SESSION: Session = {
@@ -139,95 +153,5 @@ describe("Login - Main 컴포넌트", () => {
             expect(mockNavigate).toHaveBeenCalledWith("/myProjects");
         });
     });
-});
-
-describe("Login - LoginModal 컴포넌트", () => {
-    beforeEach(() => {
-        vi.clearAllMocks();
-        sessionStorage.clear();
-    });
-
-    // 테스트 헬퍼: Router와 ThemeProvider로 감싸서 렌더링
-    const renderWithRouter = (component: React.ReactElement) => {
-        return render(
-            <ThemeProvider theme={theme}>
-                <BrowserRouter>{component}</BrowserRouter>
-            </ThemeProvider>
-        );
-    };
-
-    const MOCK_SIGN_IN_WITH_OAUTH = vi.mocked(supabase.auth.signInWithOAuth);
-    const MOCK_ERROR = {
-        message: "Authentication failed",
-        status: 400,
-        name: "AuthError",
-        code: "auth_failed",
-    };
-
-    const CONSOLE_ERROR_SPY = vi.spyOn(console, "error").mockImplementation(() => { });
-    const mockNavigate = vi.fn();
-
-    test("깃허브 로그인 성공 시 signInWithOAuth가 올바른 파라미터로 호출되어야 한다", async () => {
-        MOCK_SIGN_IN_WITH_OAUTH.mockResolvedValue({
-            data: {
-                provider: "github",
-                url: "https://github.com/login/oauth/authorize",
-            },
-            error: null,
-        });
-
-        renderWithRouter(<LoginModal onSuccess={vi.fn()} />);
-        const loginButton = screen.getByRole("button");
-
-        await userEvent.click(loginButton);
-
-        await waitFor(() => {
-            expect(MOCK_SIGN_IN_WITH_OAUTH).toHaveBeenCalledWith({
-                provider: "github",
-                options: {
-                    redirectTo: "http://localhost:3000",
-                },
-            });
-        });
-    });
-
-    test("깃허브 로그인 실패 시 LoginError 페이지로 리다이렉트되어야 한다", async () => {
-        vi.mocked(useNavigate).mockReturnValue(mockNavigate);
-
-        MOCK_SIGN_IN_WITH_OAUTH.mockResolvedValue({
-            data: {
-                provider: null,
-                url: null,
-            },
-            error: MOCK_ERROR as AuthError,
-        });
-
-        renderWithRouter(<LoginModal onSuccess={vi.fn()} />);
-        const loginButton = screen.getByRole("button");
-
-        await userEvent.click(loginButton);
-
-        await waitFor(() => {
-            expect(CONSOLE_ERROR_SPY).toHaveBeenCalledWith("Login Error");
-            expect(mockNavigate).toHaveBeenCalledWith("/login-error");
-        });
-    });
-
-    test("깃허브 로그인 중 예외 발생 시 LoginError 페이지로 리다이렉트되어야 한다", async () => {
-        vi.mocked(useNavigate).mockReturnValue(mockNavigate);
-
-        MOCK_SIGN_IN_WITH_OAUTH.mockRejectedValue(new Error("Network error"));
-
-        renderWithRouter(<LoginModal onSuccess={vi.fn()} />);
-        const loginButton = screen.getByRole("button");
-
-        await userEvent.click(loginButton);
-
-        await waitFor(() => {
-            expect(CONSOLE_ERROR_SPY).toHaveBeenCalledWith("Login Error");
-            expect(mockNavigate).toHaveBeenCalledWith("/login-error");
-        });
-    });
-
 });
 

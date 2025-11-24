@@ -1,12 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import * as S from "./MainStyle.jsx";
-import axios from "axios";
-import { API } from "../../api/axios.js";
 import { supabase } from "../../supabaseClient.js";
 
-import Footer from "../../components/Footer/Footer.jsx";
 // images
 import ReadmeImg from "../../assets/images/main-readme-img.svg";
 import DiagramImg from "../../assets/images/main-diagram-img.svg";
@@ -14,9 +10,6 @@ import ReportImg from "../../assets/images/main-report-img.svg";
 import NextPageBtnIcon from "../../assets/images/main-down-arrow.png";
 import ThirdPageTextImg from "../../assets/images/main-third-text.svg";
 
-import FolderIcon from "../../assets/images/folder-icon.png";
-import RetroIcon from "../../assets/images/retro-logo.png";
-import MainImg from "../../assets/images/main-img.png";
 import MainLogoWhiteImg from "../../assets/images/main-logo-white.svg";
 import MainDecoIcon1 from "../../assets/images/main-deco-icon1.svg";
 import MainDecoIcon2 from "../../assets/images/main-deco-icon2.svg";
@@ -139,81 +132,13 @@ function Main() {
     }
   };
 
-  const location = useLocation();
-  const [code, setCode] = useState(null);
-
-  useEffect(() => {
-    const fetchAccessToken = async () => {
-      const urlParams = new URLSearchParams(location.search);
-      const code = urlParams.get("code");
-
-      if (code) {
-        // 인가 코드를 받아온 경우에만 실행하도록 하기
-        try {
-          const response = await API.post(
-            `/api/pnd/oauth/social/github?code=${code}`
-          );
-          console.log(response);
-          const ACCESS_TOKEN = response.data.data.token;
-          // localStorage.setItem("token", ACCESS_TOKEN);
-          sessionStorage.setItem("token", ACCESS_TOKEN);
-          setCode(code);
-          await fetchUserData();
-
-          window.location.reload();
-        } catch (error) {
-          console.error("Error during authentication:", error);
-        }
-      }
-    };
-
-    fetchAccessToken();
-    //fetchUserData();
-  }, [location]);
-
-  const fetchUserData = async () => {
-    // 세션에서 토큰 가져오기
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      throw new Error("No token found in session storage");
-    }
-    if (token) {
-      try {
-        const response = await API.get(`api/pnd/user/profile`);
-        const userInfo = {
-          name: response.data.data.name,
-          email: response.data.data.email,
-          image: response.data.data.image,
-          totalDocs: response.data.data.totalDocs,
-          totalReadmes: response.data.data.totalReadmes,
-          totalDiagrams: response.data.data.totalDiagrams,
-          totalReports: response.data.data.totalReports,
-        };
-        sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
-        const testInfo = sessionStorage.getItem("userInfo");
-        const parsedUserInfo = JSON.parse(testInfo);
-        console.log(parsedUserInfo.name);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
-  // // 자동 슬라이드
-  // useEffect(() => {
-  //     const slideInterval = setInterval(() => {
-  //         goToNextPage();
-  //     }, 10000); // 10초마다 페이지 변경
-  //     return () => clearInterval(slideInterval); // 컴포넌트 언마운트 시 타이머 제거
-  // }, [currentPage]);
-
   return (
     <S.MainLayout ref={outerDivRef}>
       <S.MainFirstPage>
         <S.MainHeaderAndLoginBtn>
-          <S.MainSubHeaderText>
+          {/*           <S.MainSubHeaderText>
             소프트웨어 개발 과정에서의 문서화, 잘 되어가고 있나요?
-          </S.MainSubHeaderText>
+          </S.MainSubHeaderText> */}
           <S.MainHeaderText>
             프로젝트 문서화의 모든 것 <br />
             <S.MainLogoImg src={MainLogoWhiteImg} />
